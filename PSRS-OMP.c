@@ -1,16 +1,9 @@
-//
-// Retrieved by Edwin Kassier from https://github.com/Fitzpasd/Parallel-sort-by-regular-sampling/blob/master/psrs_sort.c
-//
-
-#include "PSRS-OMP.h"
-
 #include "omp.h"
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
 #include "math.h"
-#include <sys/time.h>
-
+//Retrieved by Edwin Kassier from https://github.com/Fitzpasd/Parallel-sort-by-regular-sampling
 /* headers */
 int lcompare(const void * ptr2num1, const void * ptr2num2);
 long long *merge(long long * left, long long * right, int l_end, int r_end);
@@ -29,14 +22,6 @@ void sortll(long long *a, int len);
 
 /* sort an array in non-descending order */
 void psrs_sort(long long *a, int n) {
-    if(n > 1){
-        if(n <= 55){
-            // Testing shows that sequential insertion sort is quickest when n <= 55 (approx.)
-            insertion_sort(a,n);
-        }else if(n <= 10000){
-            // Testing shows that sequential merge sort is quickest when n <= 10000(approx.)
-            merge_sort(a,n);
-        }else{
             // Testing shows that our algorithm is now the quickest
             int p, size, rsize, sample_size;
             long long *sample, *pivots;
@@ -169,8 +154,6 @@ void psrs_sort(long long *a, int n) {
             free(result_positions);
             free(pivots);
         }
-    }
-}
 
 
 /* determine the boundaries for the sublists of an local array */
@@ -292,155 +275,174 @@ long long *merge(long long * left, long long * right, int l_end, int r_end){
 /*
   Standard insertion sort
 */
-void insertion_sort(long long *arr, int n) {
+void insertion_sort(long long *arr, int n){
     int i, j, k, temp;
 
-    for (i = 1; i <= n; i++) {
-        for (j = 0; j < i; j++) {
-            if (arr[j] > arr[i]) {
-                temp = arr[j];
-                arr[j] = arr[i];
+    for ( i = 1 ; i <= n ; i++ )
+    {
+        for ( j = 0 ; j < i ; j++ )
+        {
+            if ( arr[j] > arr[i] )
+            {
+                temp = arr[j] ;
+                arr[j] = arr[i] ;
 
-                for (k = i; k > j; k--)
-                    arr[k] = arr[k - 1];
+                for ( k = i ; k > j ; k-- )
+                    arr[k] = arr[k - 1] ;
 
-                arr[k + 1] = temp;
+                arr[k + 1] = temp ;
             }
         }
     }
 }
-    /* the following two definitions of DEBUGGING control whether or not
-   debugging information is written out. To put the program into
-   debugging mode, uncomment the following line: */
-/*#define DEBUGGING(_x) _x */
-/* to stop the printing of debugging information, use the following line: */
-/*#define DEBUGGING(_x)*/
 
-/* this is a comparison function for long longs that is being added
-   purely to allow the standard qsort function to be used */
-    int llcompare(const void * ptr2num1, const void * ptr2num2)
-    {
-        long long num1 = *((long long*) ptr2num1);
-        long long num2 = *((long long*) ptr2num2);
+int llcompare(const void * ptr2num1, const void * ptr2num2)
+{
+    long long num1 = *((long long*) ptr2num1);
+    long long num2 = *((long long*) ptr2num2);
 
-        if ( num1 > num2 )
-            return 1;
-        else if ( num1 < num2 )
-            return -1;
-        else
-            return 0;
-    }
+    if ( num1 > num2 )
+        return 1;
+    else if ( num1 < num2 )
+        return -1;
+    else
+        return 0;
+}
 
 /* sort an array into non-decreasing order */
-    void sort(long long a[], int size)
-    {
-        qsort(a, size, sizeof(long long), llcompare);
-    }
+void sort(long long a[], int size)
+{
+    qsort(a, size, sizeof(long long), llcompare);
+}
 
 /* write out an array of integers up to 'size' */
-    void write_out(long long a[], int size)
-    {
-        int i;
+void write_out(long long a[], int size)
+{
+    int i;
 
-        for ( i = 0; i < size; i++ ) {
-            printf("%lld\n", a[i]);
-        }
+    for ( i = 0; i < size; i++ ) {
+        printf("%lld\n", a[i]);
     }
+}
 
-/* read a stream of long long numbers from a file.
-   the first number in the file is the number of numbers*/
-    long long * read_in(char filename[], int * ptr2size)
-    {
-        const int max_line = 1024;
-        char line[max_line];
-        int i;
-        FILE * file;
-        char * eof;
-        long long * a;
-        int size;
 
-        /* open the file */
-        file = fopen(filename, "r");
-        if ( file == NULL ) {
-            fprintf(stderr, "File not found: %s\n", filename);
-            exit(1);
-        }
+int main(int argc, char ** argv)
+{
+    long long * array;
+    long long * copy;
+    long long sort_time;
+    int array_size;
+    int j;
+    double start_time, end_time; /* start and end times */
+    FILE *out;
+    out = fopen("PSRS-OMP.txt", "w+");
 
-        /* read in the size of the array to allocate */
-        eof = fgets(line, max_line, file);
-        if ( eof == NULL ) {
-            fprintf(stderr, "Empty file: %s\n", filename);
-            exit(1);
-        }
-        sscanf(line, "%d", &size);
-        a = malloc(sizeof(long long) * size);
 
-        /* read in the long longs - one per line */
-        i = 0;
-        eof = fgets(line, max_line, file);
-        while ( eof != NULL && i < size ) {     /* eof == NULL => end of file */
-            sscanf(line, "%lld", &(a[i]));
+    //1000
+    fprintf(out,"Time of execution: 1000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000).txt", "r");
+        int size = 1000;
+        long long *arr = malloc(sizeof(long long) * size);
+        int i = 0;
+        long long num;
+        while (fscanf(file, "%d", &num) > 0) {
+            arr[i] = num;
             i++;
-            eof = fgets(line, max_line, file);
         }
 
-        fclose(file);
-        *ptr2size = size;
+        start_time = omp_get_wtime();
+        psrs_sort(arr, size);
+        end_time = omp_get_wtime();
 
-        return a;
+        fprintf(out,"%g\n", end_time - start_time);
     }
 
-    long long * copy_array(long long * array, int size)
-    {
-        long long * result = malloc(sizeof(long long) * size);
-        int i;
-
-        for ( i = 0; i < size; i++ ) {
-            result[i] = array[i];
-        }
-        return result;
-    }
-
-
-
-    int main(int argc, char ** argv)
-    {
-        long long * array;
-        long long * copy;
-        long long sort_time;
-        int array_size;
-        struct timeval start_time;
-        struct timeval stop_time;
-        int i;
-
-
-
-        /* make a copy of the array, so we can check sorting later */
-        copy = copy_array(array, array_size);
-
-        /* record starting time */
-        gettimeofday(&start_time, NULL);
-
-        /* sort the array somehow */
-        /* you should replace the following function with your own function */
-        psrs_sort(array, array_size);
-
-        /* record finishing time */
-        gettimeofday(&stop_time, NULL);
-        sort_time = (stop_time.tv_sec - start_time.tv_sec) * 1000000L +
-                    (stop_time.tv_usec - start_time.tv_usec);
-        printf("Sorting time: %lld microseconds\n", sort_time);
-
-
-        /* sort the copy. use built-in sorting function to check your function */
-        sort(copy, array_size);
-
-        /* now check that the two are identical */
-        for ( i = 0; i < array_size; i++ ) {
-            if ( array[i] != copy[i] ) {
-                // fprintf(stderr, "Error in sorting at position %d\n", i);
-            }
+    //10000
+    fprintf(out,"Time of execution: 10000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000).txt", "r");
+        int size = 10000;
+        long long *arr = malloc(sizeof(long long) * size);
+        int i = 0;
+        long long num;
+        while (fscanf(file, "%d", &num) > 0) {
+            arr[i] = num;
+            i++;
         }
 
-        return 0;
+        start_time = omp_get_wtime();
+        psrs_sort(arr, size);
+        end_time = omp_get_wtime();
+
+        fprintf(out,"%g\n", end_time - start_time);
     }
+
+    //100000
+    fprintf(out,"Time of execution: 100000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(100000).txt", "r");
+        int size = 100000;
+        long long *arr = malloc(sizeof(long long) * size);
+        int i = 0;
+        long long num;
+        while (fscanf(file, "%d", &num) > 0) {
+            arr[i] = num;
+            i++;
+        }
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, size);
+        end_time = omp_get_wtime();
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //1000000
+    fprintf(out,"Time of execution: 1000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000000).txt", "r");
+        int size = 1000000;
+        long long *arr = malloc(sizeof(long long) * size);
+        int i = 0;
+        long long num;
+        while (fscanf(file, "%d", &num) > 0) {
+            arr[i] = num;
+            i++;
+        }
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, size);
+        end_time = omp_get_wtime();
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //10000000
+    fprintf(out,"Time of execution: 10000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000000).txt", "r");
+        int size = 10000000;
+        long long *arr = malloc(sizeof(long long) * size);
+        int i = 0;
+        long long num;
+        while (fscanf(file, "%d", &num) > 0) {
+            arr[i] = num;
+            i++;
+        }
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, size);
+        end_time = omp_get_wtime();
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    fclose(out);
+    return 0;
+}

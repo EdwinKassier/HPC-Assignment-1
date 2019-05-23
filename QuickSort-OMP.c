@@ -15,29 +15,7 @@
 	default parameters [size] = 5000000 and [numWorkers] = 12
 	Tests ran at u-shell.csc because load was so high at ict-servers
 	that it was causing big varieties in time.
-	 
-	Output from lscpu:
-	CPU(s):                8
-	On-line CPU(s) list:   0-7
-	Thread(s) per core:    2
-	Core(s) per socket:    4
-	SIZE = 1000000
-	1 thread  - 0.248994
-	2 threads - 0.12804   - Speedup 1.945
-	4 threads - 0.0714132 - Speedup 3.487
-	8 threads - 0.0648078 - Speedup 3.842
-	
-	SIZE = 2000000
-	1 thread  - 0.537157
-	2 threads - 0.276962 - Speedup 1.939
-	4 threads - 0.158447 - Speedup 3.390
-	8 threads - 0.137578 - Speedup 3.904
-	
-	SIZE = 4000000
-	1 thread  - 1.09457
-	2 threads - 0.568864 - Speedup 1.924
-	4 threads - 0.308295 - Speedup 3.550
-	8 threads - 0.257502 - Speedup 4.251
+
 	
 	Conclusions:
 	When increasing number of threads we do not get a linear increase
@@ -99,52 +77,180 @@ void Qsort(int first, int last) {
 }
 
 int main(int argc, char *argv[]) {
+    int j;
+    FILE *out;
+    out = fopen("PSRS-OMP.txt", "w+");
 
-
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(100000).txt", "r");
-        size=100000;
-        //Number of threads
-        numWorkers=8;
-
-        int i=0;
+//1000
+    fprintf(out,"Time of execution: 1000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000).txt", "r");
+        size = 1000;
+//Number of threads
+        numWorkers = 8;
+        int i = 0;
         int num;
-        while(fscanf(file, "%d", &num) > 0){
-            vector[i] = (int)num;
+        while (fscanf(file, "%d", &num) > 0) {
+            vector[i] = (int) num;
             i++;
         }
         fclose(file);
 
-    omp_set_num_threads(numWorkers);
-
-
-
-    start_time = omp_get_wtime();
-
-    /* call Qsort  */
-    /* The sorting is done in a parallel region */
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
 #pragma omp parallel
-    {
-        /* But we only want to sort the list once, so the first call
-         * to Qsort is done only once thanks to the single parameter
-         */
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
 #pragma omp single
-        Qsort(0, (size - 1));
+            Qsort(0, (size - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
     }
 
-    end_time = omp_get_wtime();
-
-    /* check if the vector is sorted and print the sorted vector */
-    for (i = 0; i < size - 1; i++)
-        if (vector[i] > vector[i + 1]) {
-            printf("The resulting vector is not sorted!\n");
-            //return(1);
+    //10000
+    fprintf(out,"Time of execution: 10000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000).txt", "r");
+        size = 10000;
+//Number of threads
+        numWorkers = 8;
+        int i = 0;
+        int num;
+        while (fscanf(file, "%d", &num) > 0) {
+            vector[i] = (int) num;
+            i++;
         }
-#ifdef DEBUG
-    printf ("sorted vector: \n");
-  for (i = 0; i < size; i++)
-    printf (" %3d", vector[i]);
-  printf ("\n");
-#endif
+        fclose(file);
 
-    printf("It took %g seconds\n", end_time - start_time);
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (size - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+    }
+
+    //100000
+    fprintf(out,"Time of execution: 10000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(100000).txt", "r");
+        size = 100000;
+//Number of threads
+        numWorkers = 8;
+        int i = 0;
+        int num;
+        while (fscanf(file, "%d", &num) > 0) {
+            vector[i] = (int) num;
+            i++;
+        }
+        fclose(file);
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (size - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+    }
+
+    //1000000
+    printf("Time of execution: 1000000 inputs");
+    printf(".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000000).txt", "r");
+        size = 1000000;
+//Number of threads
+        numWorkers = 8;
+        int i = 0;
+        int num;
+        while (fscanf(file, "%d", &num) > 0) {
+            vector[i] = (int) num;
+            i++;
+        }
+        fclose(file);
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (size - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+    }
+
+    //10000000
+    fprintf(out,"Time of execution: 10000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000000).txt", "r");
+        size = 10000000;
+//Number of threads
+        numWorkers = 8;
+        int i = 0;
+        int num;
+        while (fscanf(file, "%d", &num) > 0) {
+            vector[i] = (int) num;
+            i++;
+        }
+        fclose(file);
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (size - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+    }
+
+
+    return 0;
 }

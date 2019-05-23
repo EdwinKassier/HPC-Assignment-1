@@ -54,11 +54,18 @@ void Validate(int arr[], int size){
 }
 
 // Driver program to test above functions
-int main(){
-    int i;
-    for (i=0; i < 10; i++) {
-    FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(100000).txt", "r");
-    int arr[100000];
+int main(int argc, char *argv[]){
+
+    FILE *out;
+    out = fopen("QS-Serial.txt", "w+");
+
+    int j;
+    //1000 inputs
+    fprintf(out,"Time of execution: 1000 inputs");
+    fprintf(out,".\n");
+    for (j=0; j < 10;j++) {
+    FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000).txt", "r");
+    int arr[1000];
 
     int i=0;
     int num;
@@ -73,9 +80,102 @@ int main(){
         quickSort(arr, 0, n - 1);
         //Validate(arr,arr);
         double end_time = omp_get_wtime() - start_time;
-        printf("Time of execution %f", end_time);
-        printf(".\n");
+        fprintf(out,"%f", end_time);
+        fprintf(out,".\n");
     }
+    //10000 inputs
+    fprintf(out,"Time of execution: 10000 inputs");
+    fprintf(out,".\n");
+    for (j=0; j < 10;j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000).txt", "r");
+        int arr[10000];
+
+        int i=0;
+        int num;
+        while(fscanf(file, "%d", &num) > 0){
+            arr[i] = num;
+            i++;
+        }
+        fclose(file);
+
+        int n = sizeof(arr)/sizeof(arr[0]);
+        double start_time = omp_get_wtime();
+        quickSort(arr, 0, n - 1);
+        //Validate(arr,arr);
+        double end_time = omp_get_wtime() - start_time;
+        fprintf(out,"%f", end_time);
+        fprintf(out,".\n");
+    }
+    //100000 inputs
+    fprintf(out,"Time of execution: 100000 inputs");
+    fprintf(out,".\n");
+    for (j=0; j < 10;j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(100000).txt", "r");
+        int arr[100000];
+
+        int i=0;
+        int num;
+        while(fscanf(file, "%d", &num) > 0){
+            arr[i] = num;
+            i++;
+        }
+        fclose(file);
+
+        int n = sizeof(arr)/sizeof(arr[0]);
+        double start_time = omp_get_wtime();
+        quickSort(arr, 0, n - 1);
+        //Validate(arr,arr);
+        double end_time = omp_get_wtime() - start_time;
+        fprintf(out,"%f", end_time);
+        fprintf(out,".\n");
+    }
+    //1000000 inputs
+    fprintf(out,"Time of execution: 1000000 inputs");
+    fprintf(out,".\n");
+    for (j=0; j < 10;j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000000).txt", "r");
+        int arr[1000000];
+
+        int i=0;
+        int num;
+        while(fscanf(file, "%d", &num) > 0){
+            arr[i] = num;
+            i++;
+        }
+        fclose(file);
+
+        int n = sizeof(arr)/sizeof(arr[0]);
+        double start_time = omp_get_wtime();
+        quickSort(arr, 0, n - 1);
+        //Validate(arr,arr);
+        double end_time = omp_get_wtime() - start_time;
+        fprintf(out,"%f", end_time);
+        fprintf(out,".\n");
+    }
+    //10000000 inputs
+    fprintf(out,"Time of execution: 10000000 inputs");
+    fprintf(out,".\n");
+    for (j=0; j < 10;j++) {
+        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000000).txt", "r");
+        int arr[10000000];
+
+        int i=0;
+        int num;
+        while(fscanf(file, "%d", &num) > 0){
+            arr[i] = num;
+            i++;
+        }
+        fclose(file);
+
+        int n = sizeof(arr)/sizeof(arr[0]);
+        double start_time = omp_get_wtime();
+        quickSort(arr, 0, n - 1);
+        //Validate(arr,arr);
+        double end_time = omp_get_wtime() - start_time;
+        fprintf(out,"%f", end_time);
+        fprintf(out,".\n");
+    }
+
     return 0;
 }
 

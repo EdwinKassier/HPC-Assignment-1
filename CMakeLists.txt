@@ -17,3 +17,4 @@ add_executable(QuickSort-OMP QuickSort-OMP.c)
 
 add_executable(PSRS-OMP PSRS-OMP.c)
 add_executable(QuickSort-MPI QuickSort-MPI.c)
+add_executable(PSRS-MPI PSRS-MPI.c)
