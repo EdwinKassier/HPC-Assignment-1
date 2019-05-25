@@ -90,7 +90,6 @@ int main(int argc, char ** argv)
     int p, id;
     MPI_Status status;
     double elapsed_time;
-    FILE * file = NULL;
     int i;
 
     if (argc!=3) {

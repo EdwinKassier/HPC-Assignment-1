@@ -28,8 +28,9 @@
 
 #include <stdio.h>
 #include <omp.h>
+#include <stdlib.h>
 
-#define MAXSIZE 5000000 /* Maximum size of array*/
+#define MAXSIZE 50000000 /* Maximum size of array*/
 #define MAXWORKERS 12 /* Maximum amount of worker threads */
 
 int size = MAXSIZE;
@@ -79,23 +80,27 @@ void Qsort(int first, int last) {
 int main(int argc, char *argv[]) {
     int j;
     FILE *out;
-    out = fopen("PSRS-OMP.txt", "w+");
+    out = fopen("QS-OMP.txt", "w+");
+    int c, num;
 
-//1000
+    //Running with two threads
+    fprintf(out,"2 threads execution");
+    fprintf(out,".\n");
+    //Number of threads
+    numWorkers = 2;
+
+    //1000
     fprintf(out,"Time of execution: 1000 inputs");
     fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000).txt", "r");
-        size = 1000;
-//Number of threads
-        numWorkers = 8;
-        int i = 0;
-        int num;
-        while (fscanf(file, "%d", &num) > 0) {
-            vector[i] = (int) num;
-            i++;
+        //seed random number generator
+        srand(1000);
+
+        //Generating random number list
+        for (c = 0; c < 1000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
         }
-        fclose(file);
 
         omp_set_num_threads(numWorkers);
         start_time = omp_get_wtime();
@@ -107,29 +112,27 @@ int main(int argc, char *argv[]) {
              * to Qsort is done only once thanks to the single parameter
              */
 #pragma omp single
-            Qsort(0, (size - 1));
+            Qsort(0, (1000 - 1));
         }
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
         fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
     }
 
     //10000
     fprintf(out,"Time of execution: 10000 inputs");
     fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000).txt", "r");
-        size = 10000;
-//Number of threads
-        numWorkers = 8;
-        int i = 0;
-        int num;
-        while (fscanf(file, "%d", &num) > 0) {
-            vector[i] = (int) num;
-            i++;
+        //seed random number generator
+        srand(10000);
+
+        //Generating random number list
+        for (c = 0; c < 10000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
         }
-        fclose(file);
 
         omp_set_num_threads(numWorkers);
         start_time = omp_get_wtime();
@@ -141,29 +144,27 @@ int main(int argc, char *argv[]) {
              * to Qsort is done only once thanks to the single parameter
              */
 #pragma omp single
-            Qsort(0, (size - 1));
+            Qsort(0, (10000 - 1));
         }
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
         fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
     }
 
     //100000
-    fprintf(out,"Time of execution: 10000 inputs");
+    fprintf(out,"Time of execution: 100000 inputs");
     fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(100000).txt", "r");
-        size = 100000;
-//Number of threads
-        numWorkers = 8;
-        int i = 0;
-        int num;
-        while (fscanf(file, "%d", &num) > 0) {
-            vector[i] = (int) num;
-            i++;
+        //seed random number generator
+        srand(100000);
+
+        //Generating random number list
+        for (c = 0; c < 100000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
         }
-        fclose(file);
 
         omp_set_num_threads(numWorkers);
         start_time = omp_get_wtime();
@@ -175,29 +176,27 @@ int main(int argc, char *argv[]) {
              * to Qsort is done only once thanks to the single parameter
              */
 #pragma omp single
-            Qsort(0, (size - 1));
+            Qsort(0, (100000 - 1));
         }
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
         fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
     }
 
     //1000000
-    printf("Time of execution: 1000000 inputs");
-    printf(".\n");
+    fprintf(out,"Time of execution: 1000000 inputs");
+    fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000000).txt", "r");
-        size = 1000000;
-//Number of threads
-        numWorkers = 8;
-        int i = 0;
-        int num;
-        while (fscanf(file, "%d", &num) > 0) {
-            vector[i] = (int) num;
-            i++;
+        //seed random number generator
+        srand(1000000);
+
+        //Generating random number list
+        for (c = 0; c < 1000000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
         }
-        fclose(file);
 
         omp_set_num_threads(numWorkers);
         start_time = omp_get_wtime();
@@ -209,29 +208,27 @@ int main(int argc, char *argv[]) {
              * to Qsort is done only once thanks to the single parameter
              */
 #pragma omp single
-            Qsort(0, (size - 1));
+            Qsort(0, (1000000 - 1));
         }
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
         fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
     }
 
     //10000000
     fprintf(out,"Time of execution: 10000000 inputs");
     fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000000).txt", "r");
-        size = 10000000;
-//Number of threads
-        numWorkers = 8;
-        int i = 0;
-        int num;
-        while (fscanf(file, "%d", &num) > 0) {
-            vector[i] = (int) num;
-            i++;
+        //seed random number generator
+        srand(10000000);
+
+        //Generating random number list
+        for (c = 0; c < 10000000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
         }
-        fclose(file);
 
         omp_set_num_threads(numWorkers);
         start_time = omp_get_wtime();
@@ -243,13 +240,352 @@ int main(int argc, char *argv[]) {
              * to Qsort is done only once thanks to the single parameter
              */
 #pragma omp single
-            Qsort(0, (size - 1));
+            Qsort(0, (10000000 - 1));
         }
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
         fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
     }
+
+    fprintf(out,"\n");
+
+
+    //Running with four threads
+    fprintf(out,"4 threads execution");
+    fprintf(out,".\n");
+    //Number of threads
+    numWorkers = 4;
+
+
+//1000
+    fprintf(out,"Time of execution: 1000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(1000);
+
+        //Generating random number list
+        for (c = 0; c < 1000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (1000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+    //10000
+    fprintf(out,"Time of execution: 10000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(10000);
+
+        //Generating random number list
+        for (c = 0; c < 10000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (10000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+    //100000
+    fprintf(out,"Time of execution: 100000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(100000);
+
+        //Generating random number list
+        for (c = 0; c < 100000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (100000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+    //1000000
+    fprintf(out,"Time of execution: 1000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(1000000);
+
+        //Generating random number list
+        for (c = 0; c < 1000000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (1000000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+    //10000000
+    fprintf(out,"Time of execution: 10000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(10000000);
+
+        //Generating random number list
+        for (c = 0; c < 10000000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (10000000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+    fprintf(out,"\n");
+    //Running with eight threads
+    fprintf(out,"8 threads execution");
+    fprintf(out,".\n");
+    //Number of threads
+    numWorkers = 8;
+//1000
+    fprintf(out,"Time of execution: 1000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(1000);
+
+        //Generating random number list
+        for (c = 0; c < 1000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (1000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+    //10000
+    fprintf(out,"Time of execution: 10000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(10000);
+
+        //Generating random number list
+        for (c = 0; c < 10000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (10000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+    //100000
+    fprintf(out,"Time of execution: 100000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(100000);
+
+        //Generating random number list
+        for (c = 0; c < 100000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (100000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+    //1000000
+    fprintf(out,"Time of execution: 1000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(1000000);
+
+        //Generating random number list
+        for (c = 0; c < 1000000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (1000000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+    //10000000
+    fprintf(out,"Time of execution: 10000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(10000000);
+
+        //Generating random number list
+        for (c = 0; c < 10000000; c++) {
+            num = rand() % 5000 + 1;
+            vector[c] = num;
+        }
+
+        omp_set_num_threads(numWorkers);
+        start_time = omp_get_wtime();
+        /* call Qsort  */
+        /* The sorting is done in a parallel region */
+#pragma omp parallel
+        {
+            /* But we only want to sort the list once, so the first call
+             * to Qsort is done only once thanks to the single parameter
+             */
+#pragma omp single
+            Qsort(0, (10000000 - 1));
+        }
+        end_time = omp_get_wtime();
+        /* check if the vector is sorted and print the sorted vector */
+
+        fprintf(out,"%g \n", end_time - start_time);
+        printf("%g \n", end_time - start_time);
+    }
+
+
 
 
     return 0;

@@ -17,11 +17,11 @@ void calc_partition_borders(long long array[],
                             long long pivots[],
                             int first_p,
                             int last_p);
-void psrs_sort(long long *a, int n);
+void psrs_sort(long long *a, int n,int P);
 void sortll(long long *a, int len);
 
 /* sort an array in non-descending order */
-void psrs_sort(long long *a, int n) {
+void psrs_sort(long long *a, int n,int P) {
             // Testing shows that our algorithm is now the quickest
             int p, size, rsize, sample_size;
             long long *sample, *pivots;
@@ -29,16 +29,7 @@ void psrs_sort(long long *a, int n) {
             long long **loc_a_ptrs;
 
             // Determine the appropriate number of threads to use
-            // p^3 <= n - We need this to hold true
-            p = omp_get_max_threads();
-            p = p*p*p;
-            if(p > n){
-                p = floor(pow(n,0.33));
-                p-=p%2;
-            }else{
-                p = omp_get_max_threads();
-                p-=p%2;
-            }
+            p=P;
             omp_set_num_threads(p);
 
             size  = (n + p - 1) / p;
@@ -333,28 +324,39 @@ int main(int argc, char ** argv)
     long long sort_time;
     int array_size;
     int j;
+    int c, num;
     double start_time, end_time; /* start and end times */
+    int numWorkers;
     FILE *out;
     out = fopen("PSRS-OMP.txt", "w+");
 
+
+    //Running with two threads
+    fprintf(out,"2 threads execution");
+    fprintf(out,".\n");
+    //Number of threads
+    numWorkers = 2;
 
     //1000
     fprintf(out,"Time of execution: 1000 inputs");
     fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000).txt", "r");
-        int size = 1000;
-        long long *arr = malloc(sizeof(long long) * size);
-        int i = 0;
-        long long num;
-        while (fscanf(file, "%d", &num) > 0) {
-            arr[i] = num;
-            i++;
+        //seed random number generator
+        srand(1000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 1000);
+
+        //Generating random number list
+        for (c = 0; c < 1000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
         }
 
         start_time = omp_get_wtime();
-        psrs_sort(arr, size);
+        psrs_sort(arr, 1000,numWorkers);
         end_time = omp_get_wtime();
+        free(arr);
 
         fprintf(out,"%g\n", end_time - start_time);
     }
@@ -363,19 +365,22 @@ int main(int argc, char ** argv)
     fprintf(out,"Time of execution: 10000 inputs");
     fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000).txt", "r");
-        int size = 10000;
-        long long *arr = malloc(sizeof(long long) * size);
-        int i = 0;
-        long long num;
-        while (fscanf(file, "%d", &num) > 0) {
-            arr[i] = num;
-            i++;
+        //seed random number generator
+        srand(10000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 10000);
+
+        //Generating random number list
+        for (c = 0; c < 10000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
         }
 
         start_time = omp_get_wtime();
-        psrs_sort(arr, size);
+        psrs_sort(arr, 10000,numWorkers);
         end_time = omp_get_wtime();
+        free(arr);
 
         fprintf(out,"%g\n", end_time - start_time);
     }
@@ -384,19 +389,23 @@ int main(int argc, char ** argv)
     fprintf(out,"Time of execution: 100000 inputs");
     fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(100000).txt", "r");
-        int size = 100000;
-        long long *arr = malloc(sizeof(long long) * size);
-        int i = 0;
-        long long num;
-        while (fscanf(file, "%d", &num) > 0) {
-            arr[i] = num;
-            i++;
+        //seed random number generator
+        srand(100000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 100000);
+
+        //Generating random number list
+        for (c = 0; c < 100000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
         }
 
+
         start_time = omp_get_wtime();
-        psrs_sort(arr, size);
+        psrs_sort(arr, 100000,numWorkers);
         end_time = omp_get_wtime();
+        free(arr);
 
         fprintf(out,"%g\n", end_time - start_time);
     }
@@ -405,19 +414,23 @@ int main(int argc, char ** argv)
     fprintf(out,"Time of execution: 1000000 inputs");
     fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000000).txt", "r");
-        int size = 1000000;
-        long long *arr = malloc(sizeof(long long) * size);
-        int i = 0;
-        long long num;
-        while (fscanf(file, "%d", &num) > 0) {
-            arr[i] = num;
-            i++;
+        //seed random number generator
+        srand(1000000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 1000000);
+
+        //Generating random number list
+        for (c = 0; c < 1000000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
         }
 
+
         start_time = omp_get_wtime();
-        psrs_sort(arr, size);
+        psrs_sort(arr, 1000000,numWorkers);
         end_time = omp_get_wtime();
+        free(arr);
 
         fprintf(out,"%g\n", end_time - start_time);
     }
@@ -426,19 +439,289 @@ int main(int argc, char ** argv)
     fprintf(out,"Time of execution: 10000000 inputs");
     fprintf(out,".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000000).txt", "r");
-        int size = 10000000;
-        long long *arr = malloc(sizeof(long long) * size);
-        int i = 0;
-        long long num;
-        while (fscanf(file, "%d", &num) > 0) {
-            arr[i] = num;
-            i++;
+        //seed random number generator
+        srand(10000000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 10000000);
+
+        //Generating random number list
+        for (c = 0; c < 10000000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
         }
 
+
         start_time = omp_get_wtime();
-        psrs_sort(arr, size);
+        psrs_sort(arr, 10000000,numWorkers);
         end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    fprintf(out,".\n");
+    //Running with four threads
+    fprintf(out,"4 threads execution");
+    fprintf(out,".\n");
+    //Number of threads
+    numWorkers = 4;
+
+    //1000
+    fprintf(out,"Time of execution: 1000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(1000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 1000);
+
+        //Generating random number list
+        for (c = 0; c < 1000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 1000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //10000
+    fprintf(out,"Time of execution: 10000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(10000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 10000);
+
+        //Generating random number list
+        for (c = 0; c < 10000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 10000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //100000
+    fprintf(out,"Time of execution: 100000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(100000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 100000);
+
+        //Generating random number list
+        for (c = 0; c < 100000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 100000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //1000000
+    fprintf(out,"Time of execution: 1000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(1000000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 1000000);
+
+        //Generating random number list
+        for (c = 0; c < 1000000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 1000000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //10000000
+    fprintf(out,"Time of execution: 10000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(10000000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 10000000);
+
+        //Generating random number list
+        for (c = 0; c < 10000000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 10000000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+
+
+    fprintf(out,".\n");
+    //Running with eight threads
+    fprintf(out,"8 threads execution");
+    fprintf(out,".\n");
+    //Number of threads
+    numWorkers = 8;
+
+    //1000
+    fprintf(out,"Time of execution: 1000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(1000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 1000);
+
+        //Generating random number list
+        for (c = 0; c < 1000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 1000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //10000
+    fprintf(out,"Time of execution: 10000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(10000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 10000);
+
+        //Generating random number list
+        for (c = 0; c < 10000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 10000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //100000
+    fprintf(out,"Time of execution: 100000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(100000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 100000);
+
+        //Generating random number list
+        for (c = 0; c < 100000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 100000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //1000000
+    fprintf(out,"Time of execution: 1000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(1000000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 1000000);
+
+        //Generating random number list
+        for (c = 0; c < 1000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 1000000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
+
+        fprintf(out,"%g\n", end_time - start_time);
+    }
+
+    //10000000
+    fprintf(out,"Time of execution: 10000000 inputs");
+    fprintf(out,".\n");
+    for (j = 0; j < 10; j++) {
+        //seed random number generator
+        srand(10000000);
+
+        //Initialise array
+        long long *arr = malloc(sizeof(long long) * 10000000);
+
+        //Generating random number list
+        for (c = 0; c < 10000000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = (long long)num;
+        }
+
+
+        start_time = omp_get_wtime();
+        psrs_sort(arr, 10000000,numWorkers);
+        end_time = omp_get_wtime();
+        free(arr);
 
         fprintf(out,"%g\n", end_time - start_time);
     }

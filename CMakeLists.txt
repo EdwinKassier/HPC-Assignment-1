@@ -7,14 +7,14 @@ set(CMAKE_C_STANDARD 99)
 
 # added -fopenmp
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -fopenmp")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--stack,9999999")
 
 #add_executable(HPC_A1 "QuickSort(Serial).c" "QuickSort(Serial).h" "QuickSort(OMP).c" "QuickSort(OMP).h")
 #add_executable(QuickSort(Serial) "QuickSort-S.c")
 #add_executable(QuickSort(OMP) "QuickSort-OMP.c")
 add_executable(QuickSort-S QuickSort-S.c)
 add_executable(QuickSort-OMP QuickSort-OMP.c)
-
-
 add_executable(PSRS-OMP PSRS-OMP.c)
 add_executable(QuickSort-MPI QuickSort-MPI.c)
 add_executable(PSRS-MPI PSRS-MPI.c)
+

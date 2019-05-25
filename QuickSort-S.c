@@ -9,26 +9,27 @@
 //
 #include<stdio.h>
 #include <omp.h>
+#include <stdlib.h>
 
 // A utility function to swap two elements
-void swap(int * x, int * y)
+void swap(int* a, int* b)
 {
-    int temp = *x;
-    *x = *y;
-    *y = temp;
+    int t = *a;
+    *a = *b;
+    *b = t;
 }
 
-int partition (int arr[], int low, int high)
+int partition (int * arr, int low, int high)
 {
-    // pivot
-    int pivot = arr[high];
-    // Index of smaller element
-    int i = (low - 1);
+    int pivot = arr[high];    // pivot
+    int i = (low - 1);  // Index of smaller element
 
-    for (int j = low; j <= high- 1; j++){
+    for (int j = low; j <= high- 1; j++)
+    {
         // If current element is smaller than or
         // equal to pivot
-        if (arr[j] <= pivot){
+        if (arr[j] <= pivot)
+        {
             i++;    // increment index of smaller element
             swap(&arr[i], &arr[j]);
         }
@@ -37,11 +38,18 @@ int partition (int arr[], int low, int high)
     return (i + 1);
 }
 
-void quickSort(int * arr, int lo, int hi){
-    if(lo < hi){
-        int p = partition(arr, lo, hi);
-        quickSort(arr, lo, p - 1);
-        quickSort(arr, p + 1, hi);
+void quickSort(int * arr, int low, int high)
+{
+    if (low < high)
+    {
+        /* pi is partitioning index, arr[p] is now
+           at right place */
+        int pi = partition(arr, low, high);
+
+        // Separately sort elements before
+        // partition and after partition
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
     }
 }
 
@@ -60,121 +68,145 @@ int main(int argc, char *argv[]){
     out = fopen("QS-Serial.txt", "w+");
 
     int j;
+    int c, num;
+
     //1000 inputs
     fprintf(out,"Time of execution: 1000 inputs");
     fprintf(out,".\n");
-    for (j=0; j < 10;j++) {
-    FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000).txt", "r");
-    int arr[1000];
+    for(j=0;j<10;j++){
+    //Initialise array
+    int arr[1000] ={0};
 
-    int i=0;
-    int num;
-    while(fscanf(file, "%d", &num) > 0){
-        arr[i] = num;
-        i++;
+    //seed random number generator
+    srand(1000);
+
+    //Generating random number list
+    for (c = 0; c < 1000; c++) {
+        num = rand() % 5000 + 1;
+        arr[c] = num;
     }
-    fclose(file);
 
-    int n = sizeof(arr)/sizeof(arr[0]);
+        int n = sizeof(arr)/sizeof(arr[0]);
+        //start timer
         double start_time = omp_get_wtime();
         quickSort(arr, 0, n - 1);
-        //Validate(arr,arr);
+        //stop timer
         double end_time = omp_get_wtime() - start_time;
         fprintf(out,"%f", end_time);
+        printf("%f",end_time);
         fprintf(out,".\n");
-    }
+   }
+
     //10000 inputs
     fprintf(out,"Time of execution: 10000 inputs");
     fprintf(out,".\n");
-    for (j=0; j < 10;j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000).txt", "r");
-        int arr[10000];
+    for(j=0;j<10;j++){
+        //Initialise array
+        int arr[10000] ={0};
 
-        int i=0;
-        int num;
-        while(fscanf(file, "%d", &num) > 0){
-            arr[i] = num;
-            i++;
+        //seed random number generator
+        srand(10000);
+
+        //Generating random number list
+        for (c = 0; c < 10000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = num;
         }
-        fclose(file);
 
         int n = sizeof(arr)/sizeof(arr[0]);
+        //start timer
         double start_time = omp_get_wtime();
         quickSort(arr, 0, n - 1);
-        //Validate(arr,arr);
+        //stop timer
         double end_time = omp_get_wtime() - start_time;
         fprintf(out,"%f", end_time);
+        printf("%f",end_time);
         fprintf(out,".\n");
     }
+
     //100000 inputs
     fprintf(out,"Time of execution: 100000 inputs");
     fprintf(out,".\n");
-    for (j=0; j < 10;j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(100000).txt", "r");
-        int arr[100000];
+    for(j=0;j<10;j++){
+        //Initialise array
+        int arr[100000] ={0};
 
-        int i=0;
-        int num;
-        while(fscanf(file, "%d", &num) > 0){
-            arr[i] = num;
-            i++;
+        //seed random number generator
+        srand(100000);
+
+        //Generating random number list
+        for (c = 0; c < 100000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = num;
         }
-        fclose(file);
 
         int n = sizeof(arr)/sizeof(arr[0]);
+        //start timer
         double start_time = omp_get_wtime();
         quickSort(arr, 0, n - 1);
-        //Validate(arr,arr);
+        //stop timer
         double end_time = omp_get_wtime() - start_time;
         fprintf(out,"%f", end_time);
+        printf("%f",end_time);
         fprintf(out,".\n");
     }
+
     //1000000 inputs
     fprintf(out,"Time of execution: 1000000 inputs");
     fprintf(out,".\n");
-    for (j=0; j < 10;j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000000).txt", "r");
-        int arr[1000000];
+    for(j=0;j<10;j++){
+        //Initialise array
+        int arr[1000000] ={0};
 
-        int i=0;
-        int num;
-        while(fscanf(file, "%d", &num) > 0){
-            arr[i] = num;
-            i++;
+        //seed random number generator
+        srand(1000000);
+
+        //Generating random number list
+        for (c = 0; c < 1000000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = num;
         }
-        fclose(file);
 
         int n = sizeof(arr)/sizeof(arr[0]);
+        //start timer
         double start_time = omp_get_wtime();
         quickSort(arr, 0, n - 1);
-        //Validate(arr,arr);
+        //stop timer
         double end_time = omp_get_wtime() - start_time;
         fprintf(out,"%f", end_time);
+        printf("%f",end_time);
         fprintf(out,".\n");
     }
+
+    
     //10000000 inputs
-    fprintf(out,"Time of execution: 10000000 inputs");
+    fprintf(out,"Time of execution: 1000000 inputs");
     fprintf(out,".\n");
-    for (j=0; j < 10;j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(10000000).txt", "r");
-        int arr[10000000];
+    for(j=0;j<10;j++){
+        //Initialise array
+        int arr[10000000] ={0};
 
-        int i=0;
-        int num;
-        while(fscanf(file, "%d", &num) > 0){
-            arr[i] = num;
-            i++;
+        //seed random number generator
+        srand(10000000);
+
+        //Generating random number list
+        for (c = 0; c < 10000000; c++) {
+            num = rand() % 5000 + 1;
+            arr[c] = num;
         }
-        fclose(file);
 
         int n = sizeof(arr)/sizeof(arr[0]);
+        //start timer
         double start_time = omp_get_wtime();
         quickSort(arr, 0, n - 1);
-        //Validate(arr,arr);
+        //stop timer
         double end_time = omp_get_wtime() - start_time;
         fprintf(out,"%f", end_time);
+        printf("%f",end_time);
         fprintf(out,".\n");
     }
+
+
 
     return 0;
 }
