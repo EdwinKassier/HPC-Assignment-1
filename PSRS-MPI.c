@@ -2,7 +2,6 @@
 // Retrieved by Edwin Kassier from https://github.com/shao-xy/mpi-psrs/blob/master/PSRS.c
 //
 
-//#include "PSRS-MPI.h"
 
 #include <stdlib.h>
 #include <stdio.h>

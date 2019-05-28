@@ -2,11 +2,7 @@
 // Created by Edwin on 2019-05-12.
 //
 
-#include "QuickSort-S.h"
 
-//
-// Created by Edwin on 2019-05-11.
-//
 #include<stdio.h>
 #include <omp.h>
 #include <stdlib.h>

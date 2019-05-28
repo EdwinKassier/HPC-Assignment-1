@@ -1,0 +1,18 @@
+#!/usr/bin/expect
+
+spawn 
+ssh kssrub001@nightmare.cs.uct.ac.za
+
+expect "password"
+
+send "1Y40urssk\r"
+
+expect "%"
+
+send "ssh -l hpc hpc.uct.ac.za\r"
+
+expect "password"
+
+send "hpc17\r"
+
+interact
