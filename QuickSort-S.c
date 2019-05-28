@@ -64,15 +64,16 @@ void Validate(int arr[], int size){
 // Driver program to test above functions
 int main(int argc, char *argv[]){
 
-    FILE *out;
-    out = fopen("QS-Serial.txt", "w+");
+
 
     int j;
     int c, num;
+    int * Large = NULL;
 
+    printf("Serial Quicksort\n");
     //1000 inputs
-    fprintf(out,"Time of execution: 1000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000 inputs");
+    printf(".\n");
     for(j=0;j<10;j++){
     //Initialise array
     int arr[1000] ={0};
@@ -92,14 +93,12 @@ int main(int argc, char *argv[]){
         quickSort(arr, 0, n - 1);
         //stop timer
         double end_time = omp_get_wtime() - start_time;
-        fprintf(out,"%f", end_time);
-        printf("%f",end_time);
-        fprintf(out,".\n");
+        printf("%f\n",end_time);
    }
 
     //10000 inputs
-    fprintf(out,"Time of execution: 10000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000 inputs");
+    printf(".\n");
     for(j=0;j<10;j++){
         //Initialise array
         int arr[10000] ={0};
@@ -119,14 +118,12 @@ int main(int argc, char *argv[]){
         quickSort(arr, 0, n - 1);
         //stop timer
         double end_time = omp_get_wtime() - start_time;
-        fprintf(out,"%f", end_time);
-        printf("%f",end_time);
-        fprintf(out,".\n");
+        printf("%f\n",end_time);
     }
 
     //100000 inputs
-    fprintf(out,"Time of execution: 100000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 100000 inputs");
+    printf(".\n");
     for(j=0;j<10;j++){
         //Initialise array
         int arr[100000] ={0};
@@ -146,14 +143,13 @@ int main(int argc, char *argv[]){
         quickSort(arr, 0, n - 1);
         //stop timer
         double end_time = omp_get_wtime() - start_time;
-        fprintf(out,"%f", end_time);
-        printf("%f",end_time);
-        fprintf(out,".\n");
+        printf("%f\n",end_time);
+
     }
 
     //1000000 inputs
-    fprintf(out,"Time of execution: 1000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000000 inputs");
+    printf(".\n");
     for(j=0;j<10;j++){
         //Initialise array
         int arr[1000000] ={0};
@@ -173,18 +169,17 @@ int main(int argc, char *argv[]){
         quickSort(arr, 0, n - 1);
         //stop timer
         double end_time = omp_get_wtime() - start_time;
-        fprintf(out,"%f", end_time);
-        printf("%f",end_time);
-        fprintf(out,".\n");
+        printf("%f\n",end_time);
     }
 
-    
+
+
     //10000000 inputs
-    fprintf(out,"Time of execution: 1000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000000 inputs");
+    printf(".\n");
     for(j=0;j<10;j++){
         //Initialise array
-        int arr[10000000] ={0};
+        int *Large = malloc (sizeof(int)*10000000);
 
         //seed random number generator
         srand(10000000);
@@ -192,19 +187,19 @@ int main(int argc, char *argv[]){
         //Generating random number list
         for (c = 0; c < 10000000; c++) {
             num = rand() % 5000 + 1;
-            arr[c] = num;
+            Large[c] = (int)num;
         }
 
-        int n = sizeof(arr)/sizeof(arr[0]);
+        int n = sizeof(Large)/sizeof(Large[0]);
         //start timer
         double start_time = omp_get_wtime();
-        quickSort(arr, 0, n - 1);
+        quickSort(Large, 0, n - 1);
         //stop timer
         double end_time = omp_get_wtime() - start_time;
-        fprintf(out,"%f", end_time);
-        printf("%f",end_time);
-        fprintf(out,".\n");
+        printf("%f\n",end_time);
+        free(Large);
     }
+
 
 
 

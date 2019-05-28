@@ -1,8 +1,8 @@
 //
-// Created by Edwin on 2019-05-19.
+// Retrieved by Edwin Kassier from https://github.com/shao-xy/mpi-psrs/blob/master/PSRS.c
 //
 
-#include "PSRS-MPI.h"
+//#include "PSRS-MPI.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -212,43 +212,29 @@ void psrs_mpi(int *array, int N)
 
 }
 
-int main() {
+int main(int argc, char ** argv) {
 
     FILE *out;
     out = fopen("PSRS-OMP.txt", "w+");
+    int N = 64;
 
     //1000
-    fprintf(out,"Time of execution: 1000 inputs");
-    fprintf(out,".\n");
+    fprintf(out, "Time of execution: 1000 inputs");
+    fprintf(out, ".\n");
     for (j = 0; j < 10; j++) {
-        FILE *file = fopen("C:\\Users\\Edwin\\CLionProjects\\HPC-A1\\Output(1000).txt", "r");
-        int size = 1000;
-        int *arr = malloc(sizeof(int) * size);
-        int i = 0;
-        int num;
-        while (fscanf(file, "%d", &num) > 0) {
-            arr[i] = num;
-            i++;
+
+        int *array;
+        array = (int *) malloc(N*sizeof(int));
+
+
+        srand(100);
+        for ( k = 0; k < N; k++) {
+            array[k] = (int)rand()%100;
         }
+        MPI_Init(&argc,&argv);      //MPI初始化
+        psrs_mpi(array,N);          //调用PSRS算法进行并行排序
 
-        start_time = omp_get_wtime();
-        psrs_sort(arr, size);
-        end_time = omp_get_wtime();
-
-        fprintf(out,"%g\n", end_time - start_time);
+        return 0;
     }
-
-    int *arr = malloc(sizeof(long long) * size);
-    int *array;
-    array = (int *) malloc(N*sizeof(int));
-
-    srand(100);
-    for ( k = 0; k < N; k++) {
-        array[k] = rand()%100;
-    }
-    MPI_Init(&argc,&argv);      //MPI初始化
-    psrs_mpi(array,N);          //调用PSRS算法进行并行排序
-
-    return 0;
 }
 

@@ -82,7 +82,7 @@ int main(int argc, char ** argv)
 {
     int n;
     int * data = NULL;
-    int c, s;
+    int cs, s;
     int * chunk;
     int o;
     int * other;
@@ -91,88 +91,307 @@ int main(int argc, char ** argv)
     MPI_Status status;
     double elapsed_time;
     int i;
+    int num;
+    int c;
+    int j;
 
-    if (argc!=3) {
-        fprintf(stderr, "Usage: mpirun -np <num_procs> %s <in_file> <out_file>\n", argv[0]);
-        exit(1);
-    }
+    FILE *out;
+    out = fopen("QS-OMP.txt", "w+");
 
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &p);
-    MPI_Comm_rank(MPI_COMM_WORLD, &id);
 
-    if (id == 0) {
-        // read size of data
-        file = fopen(argv[1], "r");
-        fscanf(file, "%d", &n);
+    printf("Time of execution: 1000 inputs, 4 processes");
+    printf(".\n");
+    for (j = 0; j < 10; j++) {
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &p);
+        MPI_Comm_rank(MPI_COMM_WORLD, &id);
+
+        //seed random number generator
+        srand(1000);
+        n = 1000;
+        //Initialise chunk size
+        cs = (n % p != 0) ? n / p + 1 : n / p;
+        //initialise array
+        data = (int *) malloc(p * cs * sizeof(int));
+
+        //Generating random number list
+        for (c = 0; c < 1000; c++) {
+            num = rand() % 5000 + 1;
+            data[c] = num;
+        }
+
+        // start the timer
+        MPI_Barrier(MPI_COMM_WORLD);
+        elapsed_time = -MPI_Wtime();
+
+        // broadcast size
+        MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
         // compute chunk size
-        c = (n%p!=0) ? n/p+1 : n/p;
-        // read data from file
-        data = (int *)malloc(p*c * sizeof(int));
-        for (i = 0; i < n; i++)
-            fscanf(file, "%d", &(data[i]));
-        fclose(file);
-        // pad data with 0 -- doesn't matter
-        for (i = n; i < p*c; i++)
-            data[i] = 0;
-    }
+        c = (n % p != 0) ? n / p + 1 : n / p;
 
-    // start the timer
-    MPI_Barrier(MPI_COMM_WORLD);
-    elapsed_time = - MPI_Wtime();
+        // scatter data
+        chunk = (int *) malloc(c * sizeof(int));
+        MPI_Scatter(data, c, MPI_INT, chunk, c, MPI_INT, 0, MPI_COMM_WORLD);
+        free(data);
+        data = NULL;
 
-    // broadcast size
-    MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+        // compute size of own chunk and sort it
+        s = (n >= c * (id + 1)) ? c : n - c * id;
+        quicksort(chunk, 0, s);
 
-    // compute chunk size
-    c = (n%p!=0) ? n/p+1 : n/p;
-
-    // scatter data
-    chunk = (int *)malloc(c * sizeof(int));
-    MPI_Scatter(data, c, MPI_INT, chunk, c, MPI_INT, 0, MPI_COMM_WORLD);
-    free(data);
-    data = NULL;
-
-    // compute size of own chunk and sort it
-    s = (n >= c * (id+1)) ? c : n - c * id;
-    quicksort(chunk, 0, s);
-
-    // up to log_2 p merge steps
-    for (step = 1; step < p; step = 2*step) {
-        if (id % (2*step) != 0) {
-            // id is no multiple of 2*step: send chunk to id-step and exit loop
-            MPI_Send(chunk, s, MPI_INT, id-step, 0, MPI_COMM_WORLD);
-            break;
+        // up to log_2 p merge steps
+        for (step = 1; step < p; step = 2 * step) {
+            if (id % (2 * step) != 0) {
+                // id is no multiple of 2*step: send chunk to id-step and exit loop
+                MPI_Send(chunk, s, MPI_INT, id - step, 0, MPI_COMM_WORLD);
+                break;
+            }
+            // id is multiple of 2*step: merge in chunk from id+step (if it exists)
+            if (id + step < p) {
+                // compute size of chunk to be received
+                o = (n >= c * (id + 2 * step)) ? c * step : n - c * (id + step);
+                // receive other chunk
+                other = (int *) malloc(o * sizeof(int));
+                MPI_Recv(other, o, MPI_INT, id + step, 0, MPI_COMM_WORLD, &status);
+                // merge and free memory
+                data = merge(chunk, s, other, o);
+                free(chunk);
+                free(other);
+                chunk = data;
+                s = s + o;
+            }
         }
-        // id is multiple of 2*step: merge in chunk from id+step (if it exists)
-        if (id+step < p) {
-            // compute size of chunk to be received
-            o = (n >= c * (id+2*step)) ? c * step : n - c * (id+step);
-            // receive other chunk
-            other = (int *)malloc(o * sizeof(int));
-            MPI_Recv(other, o, MPI_INT, id+step, 0, MPI_COMM_WORLD, &status);
-            // merge and free memory
-            data = merge(chunk, s, other, o);
-            free(chunk);
-            free(other);
-            chunk = data;
-            s = s + o;
-        }
-    }
 
-    // stop the timer
-    elapsed_time += MPI_Wtime();
+        // stop the timer
+        elapsed_time += MPI_Wtime();
 
-    // write sorted data to out file and print out timer
-    if (id == 0) {
-        file = fopen(argv[2], "w");
-        fprintf(file, "%d\n", s);   // assert (s == n)
-        for (i = 0; i < s; i++)
-            fprintf(file, "%d\n", chunk[i]);
-        fclose(file);
+        //printf(out, "%f", elapsed_time);
         printf("Quicksort %d ints on %d procs: %f secs\n", n, p, elapsed_time);
+
+        MPI_Finalize();
     }
 
-    MPI_Finalize();
+    printf(".\n");
+    printf("Time of execution: 10000 inputs, 4 processes");
+    printf(".\n");
+    for (j = 0; j < 10; j++) {
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &p);
+        MPI_Comm_rank(MPI_COMM_WORLD, &id);
+
+        //seed random number generator
+        srand(10000);
+        n = 10000;
+        //Initialise chunk size
+        cs = (n % p != 0) ? n / p + 1 : n / p;
+        //initialise array
+        data = (int *) malloc(p * cs * sizeof(int));
+
+        //Generating random number list
+        for (c = 0; c < 10000; c++) {
+            num = rand() % 5000 + 1;
+            data[c] = num;
+        }
+
+        // start the timer
+        MPI_Barrier(MPI_COMM_WORLD);
+        elapsed_time = -MPI_Wtime();
+
+        // broadcast size
+        MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+        // compute chunk size
+        c = (n % p != 0) ? n / p + 1 : n / p;
+
+        // scatter data
+        chunk = (int *) malloc(c * sizeof(int));
+        MPI_Scatter(data, c, MPI_INT, chunk, c, MPI_INT, 0, MPI_COMM_WORLD);
+        free(data);
+        data = NULL;
+
+        // compute size of own chunk and sort it
+        s = (n >= c * (id + 1)) ? c : n - c * id;
+        quicksort(chunk, 0, s);
+
+        // up to log_2 p merge steps
+        for (step = 1; step < p; step = 2 * step) {
+            if (id % (2 * step) != 0) {
+                // id is no multiple of 2*step: send chunk to id-step and exit loop
+                MPI_Send(chunk, s, MPI_INT, id - step, 0, MPI_COMM_WORLD);
+                break;
+            }
+            // id is multiple of 2*step: merge in chunk from id+step (if it exists)
+            if (id + step < p) {
+                // compute size of chunk to be received
+                o = (n >= c * (id + 2 * step)) ? c * step : n - c * (id + step);
+                // receive other chunk
+                other = (int *) malloc(o * sizeof(int));
+                MPI_Recv(other, o, MPI_INT, id + step, 0, MPI_COMM_WORLD, &status);
+                // merge and free memory
+                data = merge(chunk, s, other, o);
+                free(chunk);
+                free(other);
+                chunk = data;
+                s = s + o;
+            }
+        }
+
+        // stop the timer
+        elapsed_time += MPI_Wtime();
+
+        printf("%f", elapsed_time);
+        //printf("Quicksort %d ints on %d procs: %f secs\n", n, p, elapsed_time);
+
+        MPI_Finalize();
+    }
+
+    printf(".\n");
+    printf("Time of execution: 100000 inputs, 4 processes");
+    printf(".\n");
+    for (j = 0; j < 10; j++) {
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &p);
+        MPI_Comm_rank(MPI_COMM_WORLD, &id);
+
+        //seed random number generator
+        srand(100000);
+        n = 100000;
+        //Initialise chunk size
+        cs = (n % p != 0) ? n / p + 1 : n / p;
+        //initialise array
+        data = (int *) malloc(p * cs * sizeof(int));
+
+        //Generating random number list
+        for (c = 0; c < 100000; c++) {
+            num = rand() % 5000 + 1;
+            data[c] = num;
+        }
+
+        // start the timer
+        MPI_Barrier(MPI_COMM_WORLD);
+        elapsed_time = -MPI_Wtime();
+
+        // broadcast size
+        MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+        // compute chunk size
+        c = (n % p != 0) ? n / p + 1 : n / p;
+
+        // scatter data
+        chunk = (int *) malloc(c * sizeof(int));
+        MPI_Scatter(data, c, MPI_INT, chunk, c, MPI_INT, 0, MPI_COMM_WORLD);
+        free(data);
+        data = NULL;
+
+        // compute size of own chunk and sort it
+        s = (n >= c * (id + 1)) ? c : n - c * id;
+        quicksort(chunk, 0, s);
+
+        // up to log_2 p merge steps
+        for (step = 1; step < p; step = 2 * step) {
+            if (id % (2 * step) != 0) {
+                // id is no multiple of 2*step: send chunk to id-step and exit loop
+                MPI_Send(chunk, s, MPI_INT, id - step, 0, MPI_COMM_WORLD);
+                break;
+            }
+            // id is multiple of 2*step: merge in chunk from id+step (if it exists)
+            if (id + step < p) {
+                // compute size of chunk to be received
+                o = (n >= c * (id + 2 * step)) ? c * step : n - c * (id + step);
+                // receive other chunk
+                other = (int *) malloc(o * sizeof(int));
+                MPI_Recv(other, o, MPI_INT, id + step, 0, MPI_COMM_WORLD, &status);
+                // merge and free memory
+                data = merge(chunk, s, other, o);
+                free(chunk);
+                free(other);
+                chunk = data;
+                s = s + o;
+            }
+        }
+
+        // stop the timer
+        elapsed_time += MPI_Wtime();
+
+        printf("%f", elapsed_time);
+        //printf("Quicksort %d ints on %d procs: %f secs\n", n, p, elapsed_time);
+
+        MPI_Finalize();
+    }
+
+    printf(".\n");
+    printf("Time of execution: 1000000 inputs, 4 processes");
+    printf(".\n");
+    for (j = 0; j < 10; j++) {
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &p);
+        MPI_Comm_rank(MPI_COMM_WORLD, &id);
+
+        //seed random number generator
+        srand(1000000);
+        n = 1000000;
+        //Initialise chunk size
+        cs = (n % p != 0) ? n / p + 1 : n / p;
+        //initialise array
+        data = (int *) malloc(p * cs * sizeof(int));
+
+        //Generating random number list
+        for (c = 0; c < 1000000; c++) {
+            num = rand() % 5000 + 1;
+            data[c] = num;
+        }
+
+        // start the timer
+        MPI_Barrier(MPI_COMM_WORLD);
+        elapsed_time = -MPI_Wtime();
+
+        // broadcast size
+        MPI_Bcast(&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+        // compute chunk size
+        c = (n % p != 0) ? n / p + 1 : n / p;
+
+        // scatter data
+        chunk = (int *) malloc(c * sizeof(int));
+        MPI_Scatter(data, c, MPI_INT, chunk, c, MPI_INT, 0, MPI_COMM_WORLD);
+        free(data);
+        data = NULL;
+
+        // compute size of own chunk and sort it
+        s = (n >= c * (id + 1)) ? c : n - c * id;
+        quicksort(chunk, 0, s);
+
+        // up to log_2 p merge steps
+        for (step = 1; step < p; step = 2 * step) {
+            if (id % (2 * step) != 0) {
+                // id is no multiple of 2*step: send chunk to id-step and exit loop
+                MPI_Send(chunk, s, MPI_INT, id - step, 0, MPI_COMM_WORLD);
+                break;
+            }
+            // id is multiple of 2*step: merge in chunk from id+step (if it exists)
+            if (id + step < p) {
+                // compute size of chunk to be received
+                o = (n >= c * (id + 2 * step)) ? c * step : n - c * (id + step);
+                // receive other chunk
+                other = (int *) malloc(o * sizeof(int));
+                MPI_Recv(other, o, MPI_INT, id + step, 0, MPI_COMM_WORLD, &status);
+                // merge and free memory
+                data = merge(chunk, s, other, o);
+                free(chunk);
+                free(other);
+                chunk = data;
+                s = s + o;
+            }
+        }
+
+        // stop the timer
+        elapsed_time += MPI_Wtime();
+
+        printf("%f", elapsed_time);
+        //printf("Quicksort %d ints on %d procs: %f secs\n", n, p, elapsed_time);
+
+        MPI_Finalize();
+    }
     return 0;
 }

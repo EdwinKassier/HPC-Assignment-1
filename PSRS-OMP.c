@@ -327,19 +327,19 @@ int main(int argc, char ** argv)
     int c, num;
     double start_time, end_time; /* start and end times */
     int numWorkers;
-    FILE *out;
-    out = fopen("PSRS-OMP.txt", "w+");
 
 
+
+    printf("PSRS OMP\n");
     //Running with two threads
-    fprintf(out,"2 threads execution");
-    fprintf(out,".\n");
+    printf("2 threads execution");
+    printf(".\n");
     //Number of threads
     numWorkers = 2;
 
     //1000
-    fprintf(out,"Time of execution: 1000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000);
@@ -358,12 +358,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //10000
-    fprintf(out,"Time of execution: 10000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000);
@@ -382,12 +382,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //100000
-    fprintf(out,"Time of execution: 100000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 100000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(100000);
@@ -407,12 +407,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //1000000
-    fprintf(out,"Time of execution: 1000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000000);
@@ -432,12 +432,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //10000000
-    fprintf(out,"Time of execution: 10000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000000);
@@ -457,19 +457,19 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
-    fprintf(out,".\n");
+    printf(".\n");
     //Running with four threads
-    fprintf(out,"4 threads execution");
-    fprintf(out,".\n");
+    printf("4 threads execution");
+    printf(".\n");
     //Number of threads
     numWorkers = 4;
 
     //1000
-    fprintf(out,"Time of execution: 1000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000);
@@ -489,12 +489,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //10000
-    fprintf(out,"Time of execution: 10000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000);
@@ -514,12 +514,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //100000
-    fprintf(out,"Time of execution: 100000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 100000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(100000);
@@ -539,12 +539,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //1000000
-    fprintf(out,"Time of execution: 1000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000000);
@@ -564,12 +564,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //10000000
-    fprintf(out,"Time of execution: 10000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000000);
@@ -589,21 +589,21 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
 
 
-    fprintf(out,".\n");
+    printf(".\n");
     //Running with eight threads
-    fprintf(out,"8 threads execution");
-    fprintf(out,".\n");
+    printf("8 threads execution");
+    printf(".\n");
     //Number of threads
     numWorkers = 8;
 
     //1000
-    fprintf(out,"Time of execution: 1000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000);
@@ -623,12 +623,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //10000
-    fprintf(out,"Time of execution: 10000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000);
@@ -648,12 +648,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //100000
-    fprintf(out,"Time of execution: 100000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 100000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(100000);
@@ -673,12 +673,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //1000000
-    fprintf(out,"Time of execution: 1000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000000);
@@ -698,12 +698,12 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
 
     //10000000
-    fprintf(out,"Time of execution: 10000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000000);
@@ -723,9 +723,7 @@ int main(int argc, char ** argv)
         end_time = omp_get_wtime();
         free(arr);
 
-        fprintf(out,"%g\n", end_time - start_time);
+        printf("%g\n", end_time - start_time);
     }
-
-    fclose(out);
     return 0;
 }

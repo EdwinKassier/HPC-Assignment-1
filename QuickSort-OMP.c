@@ -1,30 +1,4 @@
-/*	Homework 3
-	Mattias Cederlund
-	mcede@kth.se
-    Quicksort using OpenMP
-    Usage with gcc (version 4.4 or higher required):
-	
-	COMPILE
-    gcc -fopenmp -o quicksort quicksort.c
-	
-	RUN
-    ./quicksort [size] [numWorkers]
-	Parameter [size] is size of array
-	Parameter [numWorkers] is number of worker threads
-	If no parameters are used the program will run with 
-	default parameters [size] = 5000000 and [numWorkers] = 12
-	Tests ran at u-shell.csc because load was so high at ict-servers
-	that it was causing big varieties in time.
-
-	
-	Conclusions:
-	When increasing number of threads we do not get a linear increase
-	in preformance because a large part of the execution is not done 
-	in parallel. The first execution of Qsort only uses one thread.
-	At recursion depth 1 we use two threads, and at depth 2 we use four.
-	A large part of execution is done before we have enough tasks to use
-	all available threads.
-*/
+//Retrieved by Edwin Kassier from https://github.com/mattec92/KTH/blob/master/ID1217%20-%20Concurrent%20Programming/Lab%203%20-%20OpenMP/quicksort.c
 
 #include <stdio.h>
 #include <omp.h>
@@ -79,19 +53,18 @@ void Qsort(int first, int last) {
 
 int main(int argc, char *argv[]) {
     int j;
-    FILE *out;
-    out = fopen("QS-OMP.txt", "w+");
     int c, num;
 
+    printf("QuickSort OMP\n");
     //Running with two threads
-    fprintf(out,"2 threads execution");
-    fprintf(out,".\n");
+    printf("2 threads execution");
+    printf(".\n");
     //Number of threads
     numWorkers = 2;
 
     //1000
-    fprintf(out,"Time of execution: 1000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000);
@@ -117,13 +90,12 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
         printf("%g \n", end_time - start_time);
     }
 
     //10000
-    fprintf(out,"Time of execution: 10000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000);
@@ -148,14 +120,12 @@ int main(int argc, char *argv[]) {
         }
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
-
-        fprintf(out,"%g \n", end_time - start_time);
         printf("%g \n", end_time - start_time);
     }
 
     //100000
-    fprintf(out,"Time of execution: 100000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 100000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(100000);
@@ -181,13 +151,12 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
         printf("%g \n", end_time - start_time);
     }
 
     //1000000
-    fprintf(out,"Time of execution: 1000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000000);
@@ -213,13 +182,13 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
+
         printf("%g \n", end_time - start_time);
     }
 
     //10000000
-    fprintf(out,"Time of execution: 10000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000000);
@@ -245,23 +214,22 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
         printf("%g \n", end_time - start_time);
     }
 
-    fprintf(out,"\n");
+    printf("\n");
 
 
     //Running with four threads
-    fprintf(out,"4 threads execution");
-    fprintf(out,".\n");
+    printf("4 threads execution");
+    printf(".\n");
     //Number of threads
     numWorkers = 4;
 
 
 //1000
-    fprintf(out,"Time of execution: 1000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000);
@@ -287,13 +255,13 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
+
         printf("%g \n", end_time - start_time);
     }
 
     //10000
-    fprintf(out,"Time of execution: 10000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000);
@@ -319,13 +287,12 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
         printf("%g \n", end_time - start_time);
     }
 
     //100000
-    fprintf(out,"Time of execution: 100000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 100000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(100000);
@@ -351,13 +318,12 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
         printf("%g \n", end_time - start_time);
     }
 
     //1000000
-    fprintf(out,"Time of execution: 1000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000000);
@@ -383,13 +349,13 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
+
         printf("%g \n", end_time - start_time);
     }
 
     //10000000
-    fprintf(out,"Time of execution: 10000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000000);
@@ -415,19 +381,18 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
         printf("%g \n", end_time - start_time);
     }
 
-    fprintf(out,"\n");
+    printf("\n");
     //Running with eight threads
-    fprintf(out,"8 threads execution");
-    fprintf(out,".\n");
+    printf("8 threads execution");
+    printf(".\n");
     //Number of threads
     numWorkers = 8;
 //1000
-    fprintf(out,"Time of execution: 1000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000);
@@ -453,13 +418,12 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
         printf("%g \n", end_time - start_time);
     }
 
     //10000
-    fprintf(out,"Time of execution: 10000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000);
@@ -485,13 +449,13 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
+
         printf("%g \n", end_time - start_time);
     }
 
     //100000
-    fprintf(out,"Time of execution: 100000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 100000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(100000);
@@ -517,13 +481,12 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
         printf("%g \n", end_time - start_time);
     }
 
     //1000000
-    fprintf(out,"Time of execution: 1000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 1000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(1000000);
@@ -549,13 +512,13 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
+
         printf("%g \n", end_time - start_time);
     }
 
     //10000000
-    fprintf(out,"Time of execution: 10000000 inputs");
-    fprintf(out,".\n");
+    printf("Time of execution: 10000000 inputs");
+    printf(".\n");
     for (j = 0; j < 10; j++) {
         //seed random number generator
         srand(10000000);
@@ -581,7 +544,7 @@ int main(int argc, char *argv[]) {
         end_time = omp_get_wtime();
         /* check if the vector is sorted and print the sorted vector */
 
-        fprintf(out,"%g \n", end_time - start_time);
+
         printf("%g \n", end_time - start_time);
     }
 
